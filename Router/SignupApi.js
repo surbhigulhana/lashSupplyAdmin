@@ -56,7 +56,7 @@ router.post("/api/userlogin", async (req, resp) => {
           });
         } 
       } else {
-          resp.send({ status: "failed", message: " password not valid" });
+          resp.send({ status: "failed", message: " id or password not valid" });
         }
     } else {
       resp.send({ status: "failed", message: "enter data first" });
