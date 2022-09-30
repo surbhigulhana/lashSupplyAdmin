@@ -54,7 +54,9 @@ router.post("/api/userlogin", async (req, resp) => {
             message: "Login Successful",
             token: token,
           });
-        } 
+        } else {
+          resp.send({ status: "failed", message: " id or password not valid" });
+        }
       } else {
           resp.send({ status: "failed", message: " id or password not valid" });
         }
