@@ -23,10 +23,12 @@ router.post(
         filename: myfilename,
       });
       const data = await user.save();
-      res.status(200).json({ success: true });
+      res
+        .status(200)
+        .json({ success: true, message: "Registration Successfull" });
     } catch (err) {
       console.log(err);
-      res.status(500).json({ success: false });
+      res.status(500).json({ message:"Email already exits",success:false });
     }
   }
 );
@@ -52,11 +54,9 @@ router.post("/api/userlogin", async (req, resp) => {
             message: "Login Successful",
             token: token,
           });
-        } else {
-          resp.send({ status: "failed", message: "id or password not valid" });
-        }
+        } 
       } else {
-        resp.send({ status: "failed", message: "id not found" });
+        resp.send({ status: "failed", message: "id or password not valid" });
       }
     } else {
       resp.send({ status: "failed", message: "enter data first" });
@@ -66,7 +66,6 @@ router.post("/api/userlogin", async (req, resp) => {
     resp.send({ status: "failed", message: "unable to login" });
   }
 });
-
 router.get("/api/sendforgotmail/:email", async (req, res) => {
   try {
     const email1 = req.params.email;
