@@ -54,12 +54,13 @@ router.post("/api/userlogin", async (req, resp) => {
             message: "Login Successful",
             token: token,
           });
-        } else {
-          resp.send({ status: "failed", message: " id or password not valid" });
+        } 
+        else {
+          resp.send({ status: "failed", message: "id or password not valid" });
         }
       } else {
-          resp.send({ status: "failed", message: " id or password not valid" });
-        }
+        resp.send({ status: "failed", message: "password not valid" });
+      }
     } else {
       resp.send({ status: "failed", message: "enter data first" });
     }
@@ -68,16 +69,20 @@ router.post("/api/userlogin", async (req, resp) => {
     resp.send({ status: "failed", message: "unable to login" });
   }
 });
+
+
+
+
 router.get("/api/sendforgotmail/:email", async (req, res) => {
   try {
     const email1 = req.params.email;
     console.log("hii", email1);
     const result = await passwordChangingMail(email1);
-    if (result) res.status(200).json(true);
-    else res.status(400).json(false);
+    if (result) res.status(200).json({success:true,message:"Link send to registered email id"});
+    else res.status(400).json({success:false,message:"Enter email is not exist"});
   } catch (err) {
     console.log(err);
-    res.status(500).json(false);
+    res.status(500).json({success:false,message:"Enter email is not exist"});
   }
 });
 
@@ -97,7 +102,7 @@ router.post("/api/changepassword", async function (req, res) {
           },
         }
       );
-      res.status(200).json({ success: true });
+      res.status(200).json({ success: true,message:"Password changed succesfully" });
     } else {
       res.status(500).json({ success: false, err: "user not found" });
     }
@@ -108,7 +113,7 @@ router.post("/api/changepassword", async function (req, res) {
 });
 
 router.put("/api/updateuser", async function (req, res) {
-  const { firstname, Lastname, Phone, email,Status } = req.body;
+  const { firstname, Lastname, Phone, email, Status } = req.body;
   try {
     const user = await registration.findOneAndUpdate(
       {
@@ -119,7 +124,7 @@ router.put("/api/updateuser", async function (req, res) {
           firstname: firstname,
           Lastname: Lastname,
           Phone: Phone,
-          Status:Status
+          Status: Status,
         },
       }
     );
@@ -163,7 +168,7 @@ router.get("/getuser", async (req, resp) => {
   resp.send(result);
 });
 router.get("/Blocked", async (req, resp) => {
-  let result = await registration.find({Status:"Blocked"});
+  let result = await registration.find({ Status: "Blocked" });
   resp.send(result);
 });
 
@@ -177,7 +182,6 @@ router.put("/user/:_id", async (req, resp) => {
   console.log(req.params);
   resp.send(result);
 });
-// -----------------------------xxxxxxxxxxxxxxxxxxxxxxxxxxxx------------------------------
-
+// -----------------------------xxxxxxxxxxxxxxxxxxxxxxxxxxxx--------------------------------
 
 module.exports = router;
