@@ -51,7 +51,19 @@ router.post(
     let result = await productData.find();
     resp.send(result);
   });
-  router.get("/product/:CateName", async (req, resp) => {
+ router.get("/MoreData/:Name", async (req, resp) => {
+    try {
+      const id = req.params.Name;
+      console.log("hello", id);
+      let result = await productData.find({ Name: id });
+      console.log(result);
+      resp.status(200).send(result);
+    } catch (err) {
+      console.log("err : ", err);
+      resp.status(400).json(err);
+    }
+  });
+  router.get("/ProductData/:CateName", async (req, resp) => {
     try {
       const id = req.params.CateName;
       console.log("hello", id);
