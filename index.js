@@ -19,7 +19,9 @@ const attribute =require("./Router/Attribute")
 const coupon =require('./Router/Coupon')
 const Payment =require("./Model/Payment")
 const Type =require("./Model/attributeType")
+
 var upload = require("./config/multer");
+const BannerImg = require("./Model/BannerImg");
 
 app.use("/",signup,AllProduct,product,category,coupon,Ticket,inquiry,attribute,order);
 
@@ -114,7 +116,45 @@ app.get("/display/:id", async (req, res) => [
     }),
 ]);
 
-  
+//  ----------------------------------------------- // 
+app.post(
+  "/BannerImg",
+  upload.single("filename"),
+  async function (req, res) {
+    const { myfilename } = req.body;
+    try {
+      const result1 = new BannerImg({
+        filename:myfilename,
+       
+      });
+      const data = await result1.save();
+      console.log(data);
+      res.status(200).json({ success: true, data: result1 });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ success: false });
+    }
+  }
+);
+app.get("/BannerImg", async (req, resp) => {
+  let result = await BannerImg.find();
+  resp.send(result);
+});
+app.post(
+  "/BannerImg/:_id",
+  upload.single("filename"),
+  async (req, resp) => {
+    const {
+      
+      myfilename,} = req.body;
+    let result = await BannerImg.updateOne(req.params, {
+      $set: {
+         filename: myfilename },
+    });
+    console.log(req.params);
+    resp.send(result);
+  }
+);
 app.listen(4003)
 console.log ('server run on 4003')
 
