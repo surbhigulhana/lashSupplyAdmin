@@ -47,9 +47,10 @@ router.post(
       }
     }
   );
-  router.get("/productData", async (req, resp) => {
+   router.get("/productData", async (req, resp) => {
     let result = await productData.find();
-    resp.send(result);
+    // resp.send(result);
+    resp.status(200).json({ success: true,statuscode:200, data: result });
   });
 router.get("/MoreData/:Name", async (req, resp) => {
     try {
