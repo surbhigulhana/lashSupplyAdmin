@@ -23,8 +23,8 @@ router.post(
   router.get("/product", async (req, resp) => {
     let result = await product.find();
   
-    resp.status(200).json({ success: true,statuscode:200, data: result });
-//       resp.send(result);
+//     resp.status(200).json({ success: true,statuscode:200, data: result });
+      resp.send(result);
   });
   router.delete("/product/:_id", async (req, resp) => {
     let result = await product.deleteOne(req.params);
