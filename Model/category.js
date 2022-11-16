@@ -9,6 +9,9 @@ const schema3 = new mongoose.Schema({
   },
   desc:{
     type:String,required:true
+  },
+  filename:{
+    type:String
   }
   
 });
