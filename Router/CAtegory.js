@@ -6,11 +6,12 @@ router.post(
     "/api/category",
     upload.single("filename"),
     async function (req, res) {
-      const { CateName, desc } = req.body;
+      const { CateName, desc,myfilename } = req.body;
       try {
         const result1 = new category({
           CateName: CateName,
           desc: desc,
+          filename:myfilename
         });
         const data = await result1.save();
         console.log(data);
@@ -19,6 +20,21 @@ router.post(
         console.log(err);
         res.status(500).json({ success: false });
       }
+    }
+  );
+  router.post(
+    "/categoryImg/:_id",
+    upload.single("filename"),
+    async (req, resp) => {
+      const {
+        
+        myfilename,} = req.body;
+      let result = await category.updateOne(req.params, {
+        $set: {
+           filename: myfilename },
+      });
+      console.log(req.params);
+      resp.send(result);
     }
   );
   router.get("/category", async (req, resp) => {
