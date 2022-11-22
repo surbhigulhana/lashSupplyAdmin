@@ -124,7 +124,7 @@ app.post(
     const { myfilename } = req.body;
     try {
       const result1 = new BannerImg({
-        filename:myfilename,
+        filename:`http://3.114.92.202:4003/filename/${req.file.filename}`
        
       });
       const data = await result1.save();
@@ -149,7 +149,7 @@ app.post(
       myfilename,} = req.body;
     let result = await BannerImg.updateOne(req.params, {
       $set: {
-         filename: myfilename },
+        filename:`http://3.114.92.202:4003/filename/${req.file.filename}` },
     });
     console.log(req.params);
     resp.send(result);
