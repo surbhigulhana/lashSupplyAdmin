@@ -1,27 +1,63 @@
-const express = require("express");
-const router = express.Router();
-// var upload = require("../config/multer");
-const productData = require("../Model/AllProduct");
-const multer = require("multer");
-const path = require("path");
 
+const productData = require("../Model/AllProduct");
+
+const path = require("path");
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+let express = require("express"),
+  multer = require("multer"),
+  mongoose = require("mongoose"),
+  uuidv4 = require("uuid/v4"),
+  router = express.Router();
+const DIR = "./public/";
 const storage = multer.diskStorage({
-  destination: "./public/uploads",
+  destination: (req, file, cb) => {
+    cb(null, DIR);
+  },
   filename: (req, file, cb) => {
-    return cb(
-      null,
-      `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`
-    );
+    const fileName = file.originalname.toLowerCase().split(" ").join("-");
+    cb(null, uuidv4() + "-" + fileName);
   },
 });
-const upload = multer({
+var upload = multer({
   storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (
+      file.mimetype == "image/png" ||
+      file.mimetype == "image/jpg" ||
+      file.mimetype == "image/jpeg"
+    ) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      return cb(new Error("Only .png, .jpg and .jpeg format allowed!"));
+    }
+  },
 });
-router.use("/filename", express.static("./public/uploads"));
+
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+// const storage = multer.diskStorage({
+//   destination: "./public/uploads",
+//   filename: (req, file, cb) => {
+//     return cb(
+//       null,
+//       `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`
+//     );
+//   },
+// });
+// const upload = multer({
+//   storage: storage,
+// });
+// router.use("/filename", express.static("./public/uploads"));
 router.post(
   "/api/productData",
-  upload.single("filename"),
+  upload.array('imgCollection', 15),
   async function (req, res) {
+    const reqFiles = [];
+    const url = req.protocol + '://' + req.get('host')
+    for (var i = 0; i < req.files.length; i++) {
+        reqFiles.push(url + '/' + req.files[i].filename)
+        console.log(reqFiles)
+    }
     const {
       Name,
       Desc,
@@ -35,8 +71,7 @@ router.post(
       AttributeType2,
 
       Price,
-      // Inventory,
-      myfilename,
+     
     } = req.body;
     try {
       const result1 = new productData({
@@ -51,8 +86,9 @@ router.post(
         AttributeType1: AttributeType1,
         AttributeType2: AttributeType2,
         Price: Price,
+        imgCollection: reqFiles
         // Inventory: Inventory,
-        filename: `http://3.114.92.202:4003/filename/${req.file.filename}`,
+        // filename: `http://3.114.92.202:4003/filename/${req.file.filename}`,
       });
       const data = await result1.save();
       console.log(data);
@@ -97,11 +133,15 @@ router.delete("/productData/:_id", async (req, resp) => {
   let result = await productData.deleteOne(req.params);
   resp.send(result);
 });
-// router.put('/productData/:_id',upload.single("filename"),async (req,resp)=>{
-//   let result = await productData.updateOne(req.params,{$set:req.body});
-//   console.log(req.params);
-//   resp.send(result);
-// })
+router.put(
+  "/productData/:_id",
+  upload.single("filename"),
+  async (req, resp) => {
+    let result = await productData.updateOne(req.params, { $set: req.body });
+    console.log(req.params);
+    resp.send(result);
+  }
+);
 
 router.post(
   "/productData/:_id",
