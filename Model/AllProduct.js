@@ -31,9 +31,12 @@ const schema3 = new mongoose.Schema({
   AttributeType2: {
     type: Array,ref:"attributeType"
   },
-  filename: {
-    type: String,
-  },
+  // filename: {
+  //   type: String,
+  // },
+  imgCollection: {
+    type: Array
+},
   Price: {
     type: String,
   },
