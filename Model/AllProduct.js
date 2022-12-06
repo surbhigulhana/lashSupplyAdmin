@@ -1,12 +1,9 @@
 var mongoose = require("mongoose");
-
 const schema3 = new mongoose.Schema({
   Name: {
-    type: String,
-  },
+    type: String, },
   Desc: {
-    type: String,
-  },
+    type: String,},
   CateName: {
     type: String,
   },
@@ -15,7 +12,7 @@ const schema3 = new mongoose.Schema({
   },
   MaxPrice: {
     type: String,
-  },
+},
   SkuNo: {
     type: String,
   },
@@ -31,18 +28,17 @@ const schema3 = new mongoose.Schema({
   AttributeType2: {
     type: Array,ref:"attributeType"
   },
-  // filename: {
-  //   type: String,
-  // },
+  
   imgCollection: {
     type: Array
 },
   Price: {
     type: String,
   },
-  // Inventory: {
-  //   type: String,
-  // },
+  StoreName:{
+    type:Array
+  }
+ 
 });
 
 const ProductData = new mongoose.model("ProductData", schema3);
