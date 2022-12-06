@@ -10,16 +10,15 @@ const signup =require("./Router/SignupApi")
 const AllProduct =require("./Router/AllproductApi");
 const product =require("./Router/ProdcutApi");
 const category =require("./Router/CAtegory")
-
 const order =require("./Router/Order")
 const inquiry =require("./Router/Inquiry");
 const Ticket =require("./Router/Ticket")
 const attribute =require("./Router/Attribute")
-
 const coupon =require('./Router/Coupon')
 const Payment =require("./Model/Payment")
 const Type =require("./Model/attributeType")
 // const uploadImg =require("./Router/Imag")
+const StoreName =require('./Model/StoreName')
 
 const BannerImg = require("./Model/BannerImg");
 
@@ -27,9 +26,6 @@ app.use("/",signup,AllProduct,coupon,Ticket,category,product,inquiry,attribute,o
 
   app.use(express.static(path.join(__dirname,"public")));
   const multer =require("multer");
-// const path =require("path");
-
-
 const storage = multer.diskStorage({
  destination:'./public/uploads',
  filename:(req,file,cb)=>{
@@ -45,7 +41,8 @@ app.use("/filename",express.static("./public/uploads"))
     "/api/payment",
     upload.single("filename"),
     async function (req, res) {
-      const { Pname, UserEmail, PurchaseDate, Mode, TotalAmt, Status } = req.body;
+      const { Pname, UserEmail, PurchaseDate, Mode, TotalAmt,Point, Status,Tpoint} = req.body;
+    
       try {
         const result1 = new Payment({
           Pname: Pname,
@@ -53,20 +50,41 @@ app.use("/filename",express.static("./public/uploads"))
           Mode: Mode,
           PurchaseDate: PurchaseDate,
           TotalAmt: TotalAmt,
+          Point:TotalAmt/10,
           Status: Status,
         });
+       
         const data = await result1.save();
+      
         console.log(data);
-        res.status(200).json({ success: true, data: result1 });
-      } catch (err) {
+        res.status(200).json({ success: true, data: result1});
+      
+      } 
+      
+      catch (err) {
         console.log(err);
         res.status(500).json({ success: false });
       }
+      
     }
   );
   app.get("/payment", async (req, resp) => {
     let result = await Payment.find();
     resp.send(result);
+  });
+  
+  app.get("/payment/:Pname", async (req, resp) => {
+    try {
+      const id = req.params.Pname;
+  
+      let result = await Payment.find({ Pname: id },{'Pname':1,'Point':1});
+      console.log(result);
+      resp.status(200).send({result});
+    
+    } catch (err) {
+      console.log("err : ", err);
+      resp.status(400).json(err);
+    }
   });
   
   app.delete("/payment/:_id", async (req, resp) => {
@@ -169,6 +187,41 @@ app.post(
     resp.send(result);
   }
 );
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+// store
+app.post( "/api/StoreName",
+  upload.single("filename"),
+  async function (req, res) {
+    const { Name} = req.body;
+  
+    try {
+      const result1 = new StoreName({
+   Name:Name 
+      });
+      const data = await result1.save();
+      console.log(data);
+      res.status(200).json({ success: true, data: result1});
+    
+    } 
+    
+    catch (err) {
+      console.log(err);
+      res.status(500).json({ success: false });
+    }
+    
+  }
+);
+app.get("/StoreName", async (req, resp) => {
+  let result = await StoreName.find();
+  resp.send(result);
+});
+
+
+app.delete("/StoreName/:_id", async (req, resp) => {
+  let result = await StoreName.deleteOne(req.params);
+  resp.send(result);
+});
+
 
 app.listen(4003)
 console.log ('server run on 4003')
