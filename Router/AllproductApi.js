@@ -71,6 +71,7 @@ router.post(
       AttributeType2,
 
       Price,
+      StoreName
      
     } = req.body;
     try {
@@ -87,6 +88,8 @@ router.post(
         AttributeType2: AttributeType2,
         Price: Price,
         imgCollection: reqFiles
+        ,
+        StoreName:StoreName
         // Inventory: Inventory,
         // filename: `http://3.114.92.202:4003/filename/${req.file.filename}`,
       });
