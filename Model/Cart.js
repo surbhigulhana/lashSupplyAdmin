@@ -7,9 +7,14 @@ const schema3 = new mongoose.Schema({
     type: String,
     required: true,
   },
-  filename: {
-    type: String ,
+
+  AttributeType1: {
+    type: Array,ref:"attributeType"
   },
+  AttributeType2: {
+    type: Array,ref:"attributeType"
+  },
+ 
   Price: {
     type: String,
   },
