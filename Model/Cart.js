@@ -7,6 +7,12 @@ const schema3 = new mongoose.Schema({
     type: String,
     required: true,
   },
+  AttributeName1: {
+    type: String,ref:"attribute"
+  },
+  AttributeName2: {
+    type: String,ref:"attribute"
+  },
 
   AttributeType1: {
     type: Array,ref:"attributeType"
@@ -14,7 +20,10 @@ const schema3 = new mongoose.Schema({
   AttributeType2: {
     type: Array,ref:"attributeType"
   },
- 
+  
+  imgCollection:{
+    type: Array
+},
   Price: {
     type: String,
   },
