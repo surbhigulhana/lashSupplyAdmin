@@ -222,19 +222,20 @@ app.delete("/StoreName/:_id", async (req, resp) => {
 });
 // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 // Add to Cart
-
-app.post("/api/AddCart", upload.single("filename"), async function (req, res) {
-  const { Pname, Price, Qty, email,AttributeType1,AttributeType2, } = req.body;
-  console.log( Pname, Price, Qty, email,AttributeType1,AttributeType2,)
+app.post("/api/AddCart", upload.single("imgCollection"), async function (req, res) {
+  
+  const { Pname, Price, Qty, email,AttributeName1,AttributeName2,AttributeType1,AttributeType2 } = req.body;
   try {
     const result1 = new Cart({
       Pname: Pname,
       Price: Price,
       Qty: Qty,
       email: email,
-    
+      AttributeName1: AttributeName1,
+      AttributeName2: AttributeName2,
       AttributeType1: AttributeType1,
       AttributeType2: AttributeType2,
+      imgCollection: `http://3.114.92.202:4003/filename/${req.file.filename}`,
       TotalPrice: Price * Qty,
     
     });
@@ -250,7 +251,7 @@ app.get("/Cart/:email", async (req, resp) => {
   try {
     const id = req.params.email;
 
-    let result = await Cart.find({ email: id },{Pname:1,Price:1});
+    let result = await Cart.find({ email: id });
     console.log(result);
     resp.status(200).send({ result });
   } catch (err) {
