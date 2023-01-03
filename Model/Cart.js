@@ -21,9 +21,7 @@ const schema3 = new mongoose.Schema({
     type: Array,ref:"attributeType"
   },
   
-  imgCollection:{
-    type: Array
-},
+  
   Price: {
     type: String,
   },
