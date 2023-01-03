@@ -29,9 +29,6 @@ const schema3 = new mongoose.Schema({
   },
   BillingAdd:{
     type:String
-  },
-  filename:{
-    type:String
   }
 
   
