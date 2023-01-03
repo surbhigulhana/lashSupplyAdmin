@@ -120,6 +120,12 @@ router.get("/MoreData/:Name", async (req, resp) => {
     resp.status(400).json(err);
   }
 });
+// produact find by letter
+router.get('/product/:Name',async (req,resp)=>{
+  let Name=new RegExp(req.params.Name);
+  let result = await productData.find({Name:Name});
+  resp.send(result);
+})
 router.get("/ProductData/:CateName", async (req, resp) => {
   try {
     const id = req.params.CateName;
