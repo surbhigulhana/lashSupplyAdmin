@@ -223,12 +223,6 @@ app.delete("/StoreName/:_id", async (req, resp) => {
 // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 // Add to Cart
 app.post("/api/AddCart",  upload.array('imgCollection', 15), async function (req, res) {
-  const reqFiles = [];
-  const url = req.protocol + '://' + req.get('host')
-  for (var i = 0; i < req.files.length; i++) {
-      reqFiles.push(url + '/' + req.files[i].filename)
-      console.log(reqFiles)
-  }
   const { Pname, Price, Qty, email,AttributeName1,AttributeName2,AttributeType1,AttributeType2 } = req.body;
   try {
     const result1 = new Cart({
@@ -240,7 +234,6 @@ app.post("/api/AddCart",  upload.array('imgCollection', 15), async function (req
       AttributeName2: AttributeName2,
       AttributeType1: AttributeType1,
       AttributeType2: AttributeType2,
-      imgCollection: reqFiles,
       TotalPrice: Price * Qty,
     
     });
