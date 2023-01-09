@@ -9,6 +9,7 @@ const signup = require("./Router/SignupApi");
 const AllProduct = require("./Router/AllproductApi");
 const product = require("./Router/ProdcutApi");
 const category = require("./Router/CAtegory");
+const Address =require('./Model/Address')
 const order = require("./Router/Order");
 const inquiry = require("./Router/Inquiry");
 const Ticket = require("./Router/Ticket");
@@ -250,6 +251,38 @@ app.get("/Cart/:email", async (req, resp) => {
     const id = req.params.email;
 
     let result = await Cart.find({ email: id });
+    console.log(result);
+    resp.status(200).send({ result });
+  } catch (err) {
+    console.log("err : ", err);
+    resp.status(400).json(err);
+  }
+});
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+// Billing Address
+app.post("/api/Address", upload.single("filename"), async function (req, res) {
+  const {  email,BillingAdd,ShipAdd } = req.body;
+  try {
+    const result1 = new Address({
+     
+      email: email,
+      BillingAdd:BillingAdd,
+      ShipAdd:ShipAdd
+     
+    
+    });
+    const data = await result1.save();
+    console.log(data);
+    res.status(200).json({ success: true, data: result1 });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false,message:"Email already exits" });
+  }
+});
+app.get("/Address/:email", async (req, resp) => {
+  try {
+    const id = req.params.email;
+    let result = await Address.find({ email: id });
     console.log(result);
     resp.status(200).send({ result });
   } catch (err) {
