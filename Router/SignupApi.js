@@ -10,7 +10,7 @@ router.post(
   "/api/userRegister",
   upload.single("filename"),
   async function (req, res) {
-    const { firstname, Lastname, Phone, email, Password, myfilename } =
+    const { firstname, Lastname, Phone, email, Password} =
       req.body;
     try {
       const hashPassword = await bcrypt.hash(Password, 10);
@@ -20,7 +20,6 @@ router.post(
         Phone: Phone,
         email: email,
         Password: hashPassword,
-        filename: myfilename,
       });
       const data = await user.save();
       res
@@ -35,6 +34,7 @@ router.post(
 router.post("/api/userlogin", async (req, resp) => {
   try {
     const { email, Password } = req.body;
+    console.log(email,Password)
     if (email && Password) {
       const regUser = await registration.findOne({ email: email });
       if (regUser != null) {
