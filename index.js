@@ -9,7 +9,6 @@ const signup = require("./Router/SignupApi");
 const AllProduct = require("./Router/AllproductApi");
 const product = require("./Router/ProdcutApi");
 const category = require("./Router/CAtegory");
-const Address =require('./Model/Address')
 const order = require("./Router/Order");
 const inquiry = require("./Router/Inquiry");
 const Ticket = require("./Router/Ticket");
@@ -18,9 +17,10 @@ const coupon = require("./Router/Coupon");
 const Payment = require("./Model/Payment");
 const Type = require("./Model/attributeType");
 // const uploadImg =require("./Router/Imag")
+const Address =require('./Model/Address')
 const Cart = require("./Model/Cart");
 const StoreName = require("./Model/StoreName");
-
+const wishlist =require('./Model/Wishlist')
 const BannerImg = require("./Model/BannerImg");
 
 app.use(
@@ -223,7 +223,8 @@ app.delete("/StoreName/:_id", async (req, resp) => {
 });
 // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 // Add to Cart
-app.post("/api/AddCart",  upload.array('imgCollection', 15), async function (req, res) {
+app.post("/api/AddCart",  upload.single('imgCollection'), async function (req, res) {
+ 
   const { Pname, Price, Qty, email,AttributeName1,AttributeName2,AttributeType1,AttributeType2 } = req.body;
   try {
     const result1 = new Cart({
@@ -235,6 +236,7 @@ app.post("/api/AddCart",  upload.array('imgCollection', 15), async function (req
       AttributeName2: AttributeName2,
       AttributeType1: AttributeType1,
       AttributeType2: AttributeType2,
+      
       TotalPrice: Price * Qty,
     
     });
@@ -251,6 +253,43 @@ app.get("/Cart/:email", async (req, resp) => {
     const id = req.params.email;
 
     let result = await Cart.find({ email: id });
+    console.log(result);
+    resp.status(200).send({ result });
+  } catch (err) {
+    console.log("err : ", err);
+    resp.status(400).json(err);
+  }
+});
+app.delete("/Cart/:_id", async (req, resp) => {
+  let result = await Cart.deleteOne(req.params);
+  resp.send(result);
+});
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+// wish list
+app.post("/api/AddWishlist", upload.single("filename"), async function (req, res) {
+  const { Pname, Price, email } = req.body;
+  try {
+    const result1 = new wishlist({
+      Pname: Pname,
+      Price: Price,
+ 
+      email: email,
+      filename: `http://3.114.92.202:4003/filename/${req.file.filename}`,
+     
+    
+    });
+    const data = await result1.save();
+    console.log(data);
+    res.status(200).json({ success: true, data: result1 });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false });
+  }
+});
+app.get("/wishlist/:email", async (req, resp) => {
+  try {
+    const id = req.params.email;
+    let result = await wishlist.find({ email: id });
     console.log(result);
     resp.status(200).send({ result });
   } catch (err) {
@@ -290,5 +329,6 @@ app.get("/Address/:email", async (req, resp) => {
     resp.status(400).json(err);
   }
 });
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 app.listen(4003);
 console.log("server run on 4003");
