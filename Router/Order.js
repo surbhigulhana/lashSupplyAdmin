@@ -36,7 +36,7 @@ router.post(
     const id=req.params.UserName;
     console.log(id)
    let result = await Order.find({UserName:id});
-    resp.status(200).send({result});
+    resp.status(200).send(result);
     }
     catch(err){
         console.log("err : ",err)
