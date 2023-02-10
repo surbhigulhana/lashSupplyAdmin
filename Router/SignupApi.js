@@ -176,9 +176,16 @@ router.delete("/deleteUser/:_id", async (req, resp) => {
   resp.send(result);
 });
 
-router.put("/user/:_id", async (req, resp) => {
-  let result = await registration.updateOne(req.params, { $set: req.body });
+router.put("/user/:email", async (req, resp) => {
+  const { firstname, Lastname, Phone} = req.body;
+  let result = await registration.updateOne(req.params, { $set:{
+    firstname: firstname,
+    Lastname: Lastname,
+    Phone:  Phone,
+  
+  } });
   console.log(req.params);
+  console.log(result)
   resp.send(result);
 });
 // -----------------------------xxxxxxxxxxxxxxxxxxxxxxxxxxxx--------------------------------
