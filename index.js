@@ -23,6 +23,8 @@ const StoreName = require("./Model/StoreName");
 const wishlist =require('./Model/Wishlist')
 const BannerImg = require("./Model/BannerImg");
 
+const ProductName= require("./Model/AllProduct")
+
 app.use(
   "/",
   signup,
@@ -266,26 +268,29 @@ app.delete("/Cart/:_id", async (req, resp) => {
 });
 // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 // wish list
-app.post("/api/AddWishlist", upload.single("filename"), async function (req, res) {
-  const { Pname, Price, email } = req.body;
+app.post("/wishlist/:Name", upload.single('imgCollection', 1),  async (req, resp) => { 
+  const id = req.params.Name;
+  let result = await ProductName.find({ Name: id },{imgCollection:1});
+  console.log(result[0].imgCollection[0]);
+  const { Price,email,Qty } = req.body;
   try {
     const result1 = new wishlist({
-      Pname: Pname,
+      Pname: id,
       Price: Price,
- 
+      Qty:Qty,
       email: email,
-      filename: `http://3.114.92.202:4003/filename/${req.file.filename}`,
-     
-    
+     imgCollection:result[0].imgCollection[0]  
     });
     const data = await result1.save();
     console.log(data);
-    res.status(200).json({ success: true, data: result1 });
+    resp.status(200).json({ success: true, data: result1 });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ success: false });
+    resp.status(500).json({ success: false });
   }
-});
+
+  }
+);
 app.get("/wishlist/:email", async (req, resp) => {
   try {
     const id = req.params.email;
