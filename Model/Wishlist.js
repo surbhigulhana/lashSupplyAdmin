@@ -1,14 +1,18 @@
 var mongoose = require("mongoose");
 const schema3 = new mongoose.Schema({
+
+email: {
+  type: String,
+  required: true,
+},
   Pname: {
     type: String,
   },
-  email: {
-    type: String,
-    required: true,
-  },
-  filename: {
+  imgCollection: {
     type: String ,
+  },
+  Qty:{
+    type:String
   },
   Price: {
     type: String,
