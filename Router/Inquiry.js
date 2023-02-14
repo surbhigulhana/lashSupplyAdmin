@@ -6,12 +6,12 @@ router.post(
     "/api/Inquiry",
     upload.single("filename"),
     async function (req, res) {
-      const { UserName,UserEmail,Phone,Message } = req.body;
+      const { UserName,UserEmail,Message } = req.body;
       try {
         const result1 = new Inquiry({
    UserName:UserName,
    UserEmail:UserEmail,
-   Phone:Phone,
+
    Message:Message      
    
         });
