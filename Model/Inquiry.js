@@ -13,10 +13,7 @@ const schema3 = new mongoose.Schema({
 
   },
   
-  Phone: {
-    type: String,
 
-  },
   
   Message: {
     type: String,
