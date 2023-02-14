@@ -45,13 +45,9 @@ router.post("/api/userlogin", async (req, resp) => {
             process.env.JWT_SECRET_KEY,
             { expiresIn: "5d" }
           );
-          /////////////
+       
           resp.send({
-            status: "success",
-
-            data: regUser,
-            message: "Login Successful",
-            token: token,
+            status: "success",  data: regUser, message: "Login Successful",token: token,
           });
         } 
         else {
@@ -68,10 +64,6 @@ router.post("/api/userlogin", async (req, resp) => {
     resp.send({ status: "failed", message: "unable to login" });
   }
 });
-
-
-
-
 router.get("/api/sendforgotmail/:email", async (req, res) => {
   try {
     const email1 = req.params.email;
@@ -84,7 +76,6 @@ router.get("/api/sendforgotmail/:email", async (req, res) => {
     res.status(500).json({success:false,message:"Enter email is not exist"});
   }
 });
-
 router.post("/api/changepassword", async function (req, res) {
   const { email, Password } = req.body;
   try {
@@ -110,7 +101,6 @@ router.post("/api/changepassword", async function (req, res) {
     res.status(500).json({ success: false, err: err });
   }
 });
-
 router.put("/api/updateuser", async function (req, res) {
   const { firstname, Lastname, Phone, email, Status } = req.body;
   try {
@@ -184,10 +174,16 @@ router.put("/user/:email", async (req, resp) => {
     Phone:  Phone,
   
   } });
-  console.log(req.params);
-  console.log(result)
-  resp.send(result);
+  resp.send({ status: "true",message:"Profile Update Sucessfully"})
 });
+
+ 
+router.put('/users/:_id', async (req, resp) => {
+  let result = await registration.updateOne(req.params, { $set: req.body });
+  console.log(req.params);
+  resp.send(result);
+})
+
 // -----------------------------xxxxxxxxxxxxxxxxxxxxxxxxxxxx--------------------------------
 
 module.exports = router;
