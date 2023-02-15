@@ -26,7 +26,7 @@ router.post(
     // resp.json({ success: true,statuscode:200 ,result:result});
       resp.send(result);
   });
-  router.delete("/product/:_id", async (req, resp) => {
+  router.delete("/productName/:_id", async (req, resp) => {
     let result = await product.deleteOne(req.params);
     resp.send(result);
   });
