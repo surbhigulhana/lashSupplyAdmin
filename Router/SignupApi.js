@@ -153,9 +153,10 @@ router.put("/api/updateuser", async function (req, res) {
 //   }
 // });
 router.get("/getuser", async (req, resp) => {
-  let result = await registration.find();
+  let result = await registration.find({Status:"Active"});
   resp.send(result);
 });
+
 router.get("/Blocked", async (req, resp) => {
   let result = await registration.find({ Status: "Blocked" });
   resp.send(result);
