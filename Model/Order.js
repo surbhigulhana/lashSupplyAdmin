@@ -1,9 +1,15 @@
+
+
+
 var mongoose = require("mongoose");
 
 const schema3 = new mongoose.Schema({
   uid:{type:'ObjectId'},
- 
-  Pname: {
+
+ orderNumber:{
+  type:String,
+ },
+  Name: {
     type: String
 
   },
@@ -11,29 +17,23 @@ const schema3 = new mongoose.Schema({
     type:String,
  
   },
-  Phone:{
+  Quantity:{
     type:String
   },
-  PurchaseDate:{
-    type:String
+  imgCollection: {
+    type: String ,
   },
-  TotalAmt:{
-    type:String
-  },
-  Status:{
-    type:String,
-    default:"Pending"
-  },
-  ShipAdd:{
-    type:String
-  },
-  BillingAdd:{
-    type:String
-  },
-  
 
-  
-  
+
+AttributeType1:{
+  type:Array,
+},
+AttributeType2:{
+  type:Array
+} , Status:{
+  type:String,
+ default:"Pending"
+},
  
 });
 
