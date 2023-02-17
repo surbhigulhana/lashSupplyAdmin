@@ -16,13 +16,11 @@ const attribute = require("./Router/Attribute");
 const coupon = require("./Router/Coupon");
 const Payment = require("./Model/Payment");
 const Type = require("./Model/attributeType");
-// const uploadImg =require("./Router/Imag")
 const Address =require('./Model/Address')
 const Cart = require("./Model/Cart");
 const StoreName = require("./Model/StoreName");
 const wishlist =require('./Model/Wishlist')
 const BannerImg = require("./Model/BannerImg");
-
 const ProductName= require("./Model/AllProduct")
 
 app.use(
@@ -200,7 +198,6 @@ app.post(
   upload.single("filename"),
   async function (req, res) {
     const { Name } = req.body;
-
     try {
       const result1 = new StoreName({
         Name: Name,
@@ -208,7 +205,8 @@ app.post(
       const data = await result1.save();
       console.log(data);
       res.status(200).json({ success: true, data: result1 });
-    } catch (err) {
+    } 
+    catch (err) {
       console.log(err);
       res.status(500).json({ success: false });
     }
@@ -226,7 +224,6 @@ app.delete("/StoreName/:_id", async (req, resp) => {
 // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 // Add to Cart
 app.post("/api/AddCart",  upload.single('imgCollection'), async function (req, res) {
- 
   const { Pname, Price, Qty, email,AttributeName1,AttributeName2,AttributeType1,AttributeType2 } = req.body;
   try {
     const result1 = new Cart({
@@ -237,10 +234,8 @@ app.post("/api/AddCart",  upload.single('imgCollection'), async function (req, r
       AttributeName1: AttributeName1,
       AttributeName2: AttributeName2,
       AttributeType1: AttributeType1,
-      AttributeType2: AttributeType2,
-      
+      AttributeType2: AttributeType2, 
       TotalPrice: Price * Qty,
-    
     });
     const data = await result1.save();
     console.log(data);
@@ -251,20 +246,54 @@ app.post("/api/AddCart",  upload.single('imgCollection'), async function (req, r
   }
 });
 app.get("/Cart/:email", async (req, resp) => {
-  try {
     const id = req.params.email;
-
     let result = await Cart.find({ email: id });
     console.log(result);
     resp.status(200).send({ result });
-  } catch (err) {
-    console.log("err : ", err);
-    resp.status(400).json(err);
-  }
+  
+ 
 });
 app.delete("/Cart/:_id", async (req, resp) => {
   let result = await Cart.deleteOne(req.params);
   resp.send(result);
+});
+
+// updated cart
+app.post("/api/AddCart/:Name",upload.single('imgCollection'), async function (req, res) {
+  
+  const id = req.params.Name;
+  let result = await ProductName.find({ Name: id },{imgCollection:1});
+  console.log(result[0].imgCollection[0]);
+  const { Pname, Price, Qty, email,AttributeName1,AttributeName2,AttributeType1,AttributeType2 } = req.body;
+  try {
+    const result1 = new Cart({
+      Pname: id,
+      Price: Price,
+      Qty: Qty,
+      email: email,
+      AttributeName1: AttributeName1,
+      AttributeName2: AttributeName2,
+      AttributeType1: AttributeType1,
+      AttributeType2: AttributeType2, 
+      TotalPrice: Price * Qty,
+      imgCollection:result[0].imgCollection[0]  
+    });
+    const data = await result1.save();
+    console.log(data);
+    res.status(200).json({ success: true, data: result1 });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false });
+  }
+});
+app.get("/Cart/:email", async (req, resp) => {
+ 
+    const id = req.params.email;
+    let result = await Cart.find({ email: id });
+    console.log(result);
+    resp.status(200).send({ result });
+    resp.status(400).json(err);
+
 });
 // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 // wish list
@@ -288,23 +317,20 @@ app.post("/wishlist/:Name", upload.single('imgCollection', 1),  async (req, resp
     console.log(err);
     resp.status(500).json({ success: false });
   }
-
   }
 );
 app.get("/wishlist/:email", async (req, resp) => {
-  try {
+
     const id = req.params.email;
     let result = await wishlist.find({ email: id });
     console.log(result);
     resp.status(200).send({ result });
-  } catch (err) {
-    console.log("err : ", err);
     resp.status(400).json(err);
-  }
+
 });
-// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 // Billing Address
-app.post("/api/Address", upload.single("filename"), async function (req, res) {
+app.post("/api/Address", async function (req, res) {
   const {  email,BillingAdd,ShipAdd } = req.body;
   try {
     const result1 = new Address({
@@ -337,3 +363,26 @@ app.get("/Address/:email", async (req, resp) => {
 // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 app.listen(4003);
 console.log("server run on 4003");
+
+
+
+
+
+
+
+
+// var api_key="2cc672fddd292cffddb335e4861698f6-ca9eeb88-80944c1e";
+// var domain ="sandboxd398506ab1cf42a3830afc688fac24d2.mailgun.org"
+// var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+// var data = {
+//   from: 'Excited User <gurisachin09@gmail.com>',
+//   to: 'surbhigulhana3@gmail.com',
+//   subject: 'Hello',
+//   text: 'Testing some Mailgun awesomeness iuyyh!'
+// };
+// mailgun.messages().send(data, function (error, body) {
+//     if(error){
+//         console.log(error);
+//     }
+//   console.log(body);
+// });
