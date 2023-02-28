@@ -158,6 +158,19 @@ router.get("/ProductData/:CateName", async (req, resp) => {
     resp.status(400).json(err);
   }
 });
+// find by type
+router.get("/Products/:ProductType", async (req, resp) => {
+  try {
+    const id = req.params.ProductType;
+    console.log("hello", id);
+    let result = await productData.find({ ProductType: id });
+    console.log(result);
+    resp.status(200).send(result);
+  } catch (err) {
+    console.log("err : ", err);
+    resp.status(400).json(err);
+  }
+});
 router.delete("/productData/:_id", async (req, resp) => {
   let result = await productData.deleteOne(req.params);
   resp.send(result);
