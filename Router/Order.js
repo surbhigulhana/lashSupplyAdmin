@@ -28,13 +28,14 @@ router.post(
       }
     }
   );
+ // working
   router.post(
     "/api/Myorder/:Name", upload.single('imgCollection', 1),
     async function (req, res) {
       const id = req.params.Name;
   let result = await ProductName.find({ Name: id },{imgCollection:1});
   console.log(result[0].imgCollection[0]);
-      const {orderNumber,UserName, Quantity,AttributeType1,AttributeType2,Status} = req.body;
+      const {orderNumber,UserName, Quantity,AttributeType1,AttributeType2,Status,TotalAmt} = req.body;
       try {
         const result1 = new Order({
      orderNumber:orderNumber,
@@ -43,6 +44,7 @@ router.post(
     Quantity:Quantity,
     AttributeType1:AttributeType1,
     AttributeType2:AttributeType2,
+    TotalAmt:TotalAmt,
     imgCollection:result[0].imgCollection[0],
     Status:Status,
         });
