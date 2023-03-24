@@ -74,12 +74,16 @@ const schema3 = new mongoose.Schema({
  
   },
   Quantity:{
-    type:String
+    type:Number
   },
   imgCollection: {
     type: String ,
-  },
+  }
+  ,
+  TotalAmt: {
+    type: Number
 
+  },
 
 AttributeType1:{
   type:Array,
