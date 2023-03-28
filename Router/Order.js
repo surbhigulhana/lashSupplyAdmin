@@ -7,46 +7,17 @@ router.post(
     "/api/order",
     upload.single("filename"),
     async function (req, res) {
-      const {Pname,UserName,Phone,PurchaseDate,TotalAmt,ShipAdd,BillingAdd,Status} = req.body;
+      const {Pname,UserName,Quantity,PurchaseDate,TotalAmt,ShipAdd,BillingAdd,Status} = req.body;
       try {
         const result1 = new Order({
       Pname:Pname,
       UserName:UserName,
       PurchaseDate:PurchaseDate,
-      Phone:Phone,
+      Quantity:Quantity,
       ShipAdd:ShipAdd,
       BillingAdd:BillingAdd,
       Status:Status,
       TotalAmt:TotalAmt
-        });
-        const data = await result1.save();
-        console.log(data);
-        res.status(200).json({ success: true, data: result1 });
-      } catch (err) {
-        console.log(err);
-        res.status(500).json({ success: false });
-      }
-    }
-  );
- // working
-  router.post(
-    "/api/Myorder/:Name", upload.single('imgCollection', 1),
-    async function (req, res) {
-      const id = req.params.Name;
-  let result = await ProductName.find({ Name: id },{imgCollection:1});
-  console.log(result[0].imgCollection[0]);
-      const {orderNumber,UserName, Quantity,AttributeType1,AttributeType2,Status,TotalAmt} = req.body;
-      try {
-        const result1 = new Order({
-     orderNumber:orderNumber,
-      Name:id,
-      UserName:UserName,
-    Quantity:Quantity,
-    AttributeType1:AttributeType1,
-    AttributeType2:AttributeType2,
-    TotalAmt:TotalAmt,
-    imgCollection:result[0].imgCollection[0],
-    Status:Status,
         });
         const data = await result1.save();
         console.log(data);
