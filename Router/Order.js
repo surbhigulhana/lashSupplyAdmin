@@ -7,7 +7,7 @@ router.post(
     "/api/order",
     upload.single("filename"),
     async function (req, res) {
-      const {Pname,UserName,Quantity,PurchaseDate,TotalAmt,ShipAdd,BillingAdd,Status} = req.body;
+      const {Pname,UserName,Quantity,PurchaseDate,TotalAmt,ShipAdd,BillingAdd,Status,Phone, AttributeType1,AttributeType2,Landmark,PostalCode} = req.body;
       try {
         const result1 = new Order({
       Pname:Pname,
@@ -17,7 +17,12 @@ router.post(
       ShipAdd:ShipAdd,
       BillingAdd:BillingAdd,
       Status:Status,
-      TotalAmt:TotalAmt
+      TotalAmt:TotalAmt,
+      Phone:Phone,
+      AttributeType1:AttributeType1,
+      AttributeType2:AttributeType2,
+      Landmark:Landmark,
+      PostalCode:PostalCode
         });
         const data = await result1.save();
         console.log(data);
